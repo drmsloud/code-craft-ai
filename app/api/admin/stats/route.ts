@@ -1,37 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-// Mock data - in production, this would query DynamoDB
-const mockOrders = [
-  {
-    id: 'order_1',
-    templateName: 'React Admin Dashboard',
-    email: 'customer@example.com',
-    amount: 19,
-    date: new Date().toISOString().split('T')[0],
-  },
-  {
-    id: 'order_2',
-    templateName: 'Next.js SaaS Starter',
-    email: 'user@test.com',
-    amount: 29,
-    date: new Date().toISOString().split('T')[0],
-  },
-]
+import { getDashboardStats } from '@/lib/dynamodb'
 
 export async function GET(request: NextRequest) {
   try {
-    const totalRevenue = mockOrders.reduce((sum, order) => sum + order.amount, 0)
-    const ordersCount = mockOrders.length
-    const lastOrder = mockOrders[0] || null
+    const stats = await getDashboardStats()
+
+    // Format orders for display
+    const formattedOrders = (stats.orders || []).map((order) => ({
+      id: order.orderId,
+      templateName: order.templateName,
+      email: order.email,
+      amount: order.amount,
+      date: new Date(order.createdAt).toISOString().split('T')[0],
+    }))
 
     return NextResponse.json({
-      totalSales: ordersCount,
-      totalRevenue,
-      ordersCount,
-      lastOrder,
-      orders: mockOrders,
+      totalSales: stats.ordersCount,
+      totalRevenue: stats.totalRevenue,
+      ordersCount: stats.ordersCount,
+      avgOrderValue: stats.avgOrderValue,
+      lastOrder: formattedOrders[0] || null,
+      orders: formattedOrders,
     })
   } catch (error) {
+    console.error('Error fetching stats:', error)
     return NextResponse.json(
       { error: 'Failed to fetch stats' },
       { status: 500 }
