@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { templates } from '@/lib/templates'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -13,6 +14,10 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Find the template and get its download URL
+    const template = templates.find(t => t.id === templateId)
+    const downloadUrl = template?.downloadUrl || null
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -36,10 +41,14 @@ export async function POST(request: NextRequest) {
       metadata: {
         templateId,
         templateName,
+        downloadUrl: downloadUrl || '',
       },
     })
 
-    return NextResponse.json({ sessionId: session.id })
+    return NextResponse.json({ 
+      sessionId: session.id,
+      downloadUrl: downloadUrl,
+    })
   } catch (error) {
     console.error('Checkout error:', error)
     return NextResponse.json(

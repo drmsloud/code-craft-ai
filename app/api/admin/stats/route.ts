@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDashboardStats } from '@/lib/dynamodb'
+import { getDashboardStats } from '@/lib/orders-local'
 
 export async function GET(request: NextRequest) {
   try {
