@@ -19,6 +19,9 @@ export async function POST(request: NextRequest) {
     const template = templates.find(t => t.id === templateId)
     const downloadUrl = template?.downloadUrl || null
 
+    // Get app URL with fallback for Vercel
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || `https://${request.headers.get('host')}`
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -36,8 +39,8 @@ export async function POST(request: NextRequest) {
       ],
       mode: 'payment',
       customer_email: email,
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
+      success_url: `${appUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/cancel`,
       metadata: {
         templateId,
         templateName,
