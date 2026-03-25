@@ -6,11 +6,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export async function POST(request: NextRequest) {
   try {
-    const { templateId, templateName, amount, email } = await request.json()
+    const body = await request.json()
+    const { templateId, templateName, amount, email } = body
+    
+    console.log('Checkout request:', { templateId, templateName, amount, email })
+    console.log('Stripe key loaded:', !!process.env.STRIPE_SECRET_KEY)
 
     if (!email || !amount || !templateId) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields', received: body },
         { status: 400 }
       )
     }
