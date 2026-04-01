@@ -5,6 +5,11 @@ import EmailOptIn from '@/components/EmailOptIn'
 export default function Home() {
   return (
     <main>
+      {/* Urgency Banner */}
+      <div className="bg-red-600 text-white text-center py-3 px-4 font-semibold text-sm">
+        🔥 LIMITED TIME: React Dashboard &amp; Vue E-Commerce templates — <strong>$9 each TODAY ONLY</strong> (normally $29-$39). Don&apos;t miss it!
+      </div>
+
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-indigo-600 to-pink-500 text-white py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">

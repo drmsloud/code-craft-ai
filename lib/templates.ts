@@ -20,7 +20,7 @@ export const templates: Template[] = [
     description: 'Modern analytics dashboard with real-time data visualization, state management, and responsive design',
     language: 'React',
     framework: 'React 18 + TypeScript + Tailwind CSS',
-    price: 29,
+    price: 9,
     icon: '📊',
     features: [
       'Real-time charts with Recharts',
@@ -40,7 +40,7 @@ export const templates: Template[] = [
     description: 'Full-featured e-commerce storefront with product catalog, shopping cart, and checkout flow',
     language: 'Vue',
     framework: 'Vue 3 + Composition API + Tailwind CSS',
-    price: 39,
+    price: 9,
     icon: '🛒',
     features: [
       'Product listing and filtering',
